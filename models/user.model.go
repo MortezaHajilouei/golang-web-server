@@ -18,14 +18,14 @@ type User struct {
 	UpdatedAt time.Time `gorm:"not null"`
 }
 
-type SignUpInput struct {
+type UserSignUpInput struct {
 	Name            string `json:"name" binding:"required"`
 	Email           string `json:"email" binding:"required"`
 	Password        string `json:"password" binding:"required,min=8"`
 	PasswordConfirm string `json:"passwordConfirm" binding:"required"`
 }
 
-type SignInInput struct {
+type UserSignInInput struct {
 	Email    string `json:"email"  binding:"required"`
 	Password string `json:"password"  binding:"required"`
 }
@@ -34,8 +34,6 @@ type UserResponse struct {
 	ID        uuid.UUID `json:"id,omitempty"`
 	Name      string    `json:"name,omitempty"`
 	Email     string    `json:"email,omitempty"`
-	Role      string    `json:"role,omitempty"`
-	Provider  string    `json:"provider"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }

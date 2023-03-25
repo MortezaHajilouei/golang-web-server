@@ -36,16 +36,16 @@ func init() {
 
 	initializers.ConnectDB(&config)
 
+	server = gin.Default()
+
 	AuthController = controllers.NewAuthController(initializers.DB)
 	//AuthRouteController = routes.NewAuthRouteController(AuthController)
 
 	UserController = controllers.NewUserController(initializers.DB)
 	//UserRouteController = routes.NewRouteUserController(UserController)
 
-	server = gin.Default()
 }
 
-// Default
 func main() {
 
 	config, err := initializers.LoadConfig(".")
@@ -54,21 +54,20 @@ func main() {
 	}
 
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:8000", config.ClientOrigin}
+	corsConfig.AllowOrigins = []string{"http://localhost:8080", config.ClientOrigin}
 	corsConfig.AllowCredentials = true
 
 	server.Use(cors.New(corsConfig))
 
 	router := server.Group("/api/v1")
 	{
-		router_user := router.Group("/user")
-		{
-			AuthRouteController.AuthRoute(router_user)
-			UserRouteController.UserRoute(router_user)
-		}
+		AuthRouteController.AuthRoute(router)
+		UserRouteController.UserRoute(router)
 	}
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url, ginSwagger.DefaultModelsExpandDepth(-1)))
-	log.Fatal(server.Run(":" + config.ServerPort))
 
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url,
+		ginSwagger.DefaultModelsExpandDepth(-1)))
+
+	log.Fatal(server.Run(":" + config.ServerPort))
 }
