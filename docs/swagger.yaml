@@ -1,18 +1,4 @@
 info:
   contact: {}
-paths:
-  /p1/hello:
-    get:
-      description: send hello world
-      responses:
-        "200":
-          description: OK
-      summary: send hello world
-  /p1/ping:
-    get:
-      description: check server is running
-      responses:
-        "200":
-          description: OK
-      summary: send status 200
+paths: {}
 swagger: "2.0"
