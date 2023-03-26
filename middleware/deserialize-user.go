@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/MortezaHajilouei/golang-web-server/initializers"
+	"github.com/MortezaHajilouei/golang-web-server/models"
+	"github.com/MortezaHajilouei/golang-web-server/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/wpcodevo/golang-gorm-postgres/initializers"
-	"github.com/wpcodevo/golang-gorm-postgres/models"
-	"github.com/wpcodevo/golang-gorm-postgres/utils"
 )
 
 func DeserializeUser() gin.HandlerFunc {

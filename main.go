@@ -4,12 +4,14 @@ import (
 	"log"
 
 	"github.com/MortezaHajilouei/golang-web-server/controllers"
-	docs "github.com/MortezaHajilouei/golang-web-server/docs"
+	"github.com/MortezaHajilouei/golang-web-server/docs"
 	"github.com/MortezaHajilouei/golang-web-server/initializers"
+	"github.com/MortezaHajilouei/golang-web-server/middleware"
 	"github.com/MortezaHajilouei/golang-web-server/routes"
-	"github.com/gin-contrib/cors"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -36,13 +38,14 @@ func init() {
 
 	initializers.ConnectDB(&config)
 
+	gin.SetMode(config.GIN_MODE)
 	server = gin.Default()
 
 	AuthController = controllers.NewAuthController(initializers.DB)
-	//AuthRouteController = routes.NewAuthRouteController(AuthController)
+	AuthRouteController = routes.NewAuthRouteController(AuthController)
 
 	UserController = controllers.NewUserController(initializers.DB)
-	//UserRouteController = routes.NewRouteUserController(UserController)
+	UserRouteController = routes.NewRouteUserController(UserController)
 
 }
 
@@ -58,11 +61,14 @@ func main() {
 	corsConfig.AllowCredentials = true
 
 	server.Use(cors.New(corsConfig))
+	server.Use(middleware.DefaultStructuredLogger())
+	server.Use(gin.Recovery())
 
 	router := server.Group("/api/v1")
 	{
 		AuthRouteController.AuthRoute(router)
 		UserRouteController.UserRoute(router)
+		router.GET("/job/", controllers.Job1)
 	}
 
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")

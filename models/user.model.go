@@ -8,14 +8,14 @@ import (
 
 type User struct {
 	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
-	Name      string    `gorm:"type:varchar(255);not null"`
-	Email     string    `gorm:"uniqueIndex;not null"`
+	Name      string    `gorm:"type:varchar(255);not null" filter:"param:login;searchable;filterable;"`
+	Email     string    `gorm:"uniqueIndex;not null" `
+	Phone     string    `gorm:"unique;null;"`
 	Password  string    `gorm:"not null"`
-	Phone     string    `gorm:"not null"`
-	Verified  bool      `gorm:"not null"`
-	Enabled   bool      `gorm:"not null"`
-	CreatedAt time.Time `gorm:"not null"`
-	UpdatedAt time.Time `gorm:"not null"`
+	Verified  bool      `gorm:"not null;default:false;"`
+	Enabled   bool      `gorm:"not null;default:false;"`
+	CreatedAt time.Time `gorm:"autoCreateTime;<-:create;"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime;"`
 }
 
 type UserSignUpInput struct {

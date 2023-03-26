@@ -1,9 +1,10 @@
 package routes
 
 import (
+	"github.com/MortezaHajilouei/golang-web-server/controllers"
+	"github.com/MortezaHajilouei/golang-web-server/middleware"
+
 	"github.com/gin-gonic/gin"
-	"github.com/wpcodevo/golang-gorm-postgres/controllers"
-	"github.com/wpcodevo/golang-gorm-postgres/middleware"
 )
 
 type UserRouteController struct {
@@ -17,5 +18,6 @@ func NewRouteUserController(userController controllers.UserController) UserRoute
 func (uc *UserRouteController) UserRoute(rg *gin.RouterGroup) {
 
 	router := rg.Group("users")
+	router.GET("/all", uc.userController.GetAll)
 	router.GET("/me", middleware.DeserializeUser(), uc.userController.GetMe)
 }
