@@ -3,11 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/MortezaHajilouei/golang-web-server/controllers"
-	"github.com/MortezaHajilouei/golang-web-server/docs"
-	"github.com/MortezaHajilouei/golang-web-server/initializers"
+	"github.com/MortezaHajilouei/golang-web-server/config"
 	"github.com/MortezaHajilouei/golang-web-server/middleware"
-	"github.com/MortezaHajilouei/golang-web-server/routes"
+	"github.com/MortezaHajilouei/golang-web-server/route"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -17,63 +15,33 @@ import (
 )
 
 var (
-	server              *gin.Engine
-	AuthController      controllers.AuthController
-	AuthRouteController routes.AuthRouteController
-
-	UserController      controllers.UserController
-	UserRouteController routes.UserRouteController
+	server *gin.Engine
 )
 
 func init() {
-	docs.SwaggerInfo.Title = "GardeshPay"
-	docs.SwaggerInfo.Description = "GardeshPay"
-	docs.SwaggerInfo.Host = "localhost:8080"
-	docs.SwaggerInfo.BasePath = "/api/v1"
 
-	config, err := initializers.LoadConfig(".")
-	if err != nil {
-		log.Fatal("? Could not load environment variables", err)
-	}
+	config.InitConfig(".")
+	config.ConnectDB(&config.Config_)
+	config.Auth(config.DB)
+	config.Swagger()
+	gin.SetMode(config.Config_.GIN_MODE)
 
-	initializers.ConnectDB(&config)
-
-	gin.SetMode(config.GIN_MODE)
 	server = gin.Default()
-
-	AuthController = controllers.NewAuthController(initializers.DB)
-	AuthRouteController = routes.NewAuthRouteController(AuthController)
-
-	UserController = controllers.NewUserController(initializers.DB)
-	UserRouteController = routes.NewRouteUserController(UserController)
-
 }
 
 func main() {
 
-	config, err := initializers.LoadConfig(".")
-	if err != nil {
-		log.Fatal("? Could not load environment variables", err)
-	}
-
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{"http://localhost:8080", config.ClientOrigin}
+	corsConfig.AllowOrigins = []string{"http://localhost:8080", config.Config_.ClientOrigin}
 	corsConfig.AllowCredentials = true
 
 	server.Use(cors.New(corsConfig))
 	server.Use(middleware.DefaultStructuredLogger())
 	server.Use(gin.Recovery())
+	server.Use(middleware.Session())
+	server.Use(middleware.Authenticate())
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	route.SetupRoutes(config.DB, server)
 
-	router := server.Group("/api/v1")
-	{
-		AuthRouteController.AuthRoute(router)
-		UserRouteController.UserRoute(router)
-		router.GET("/job/", controllers.Job1)
-	}
-
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url,
-		ginSwagger.DefaultModelsExpandDepth(-1)))
-
-	log.Fatal(server.Run(":" + config.ServerPort))
+	log.Fatal(server.Run(":" + config.Config_.ServerPort))
 }

@@ -1,6 +1,7 @@
-package initializers
+package config
 
 import (
+	"log"
 	"time"
 
 	"github.com/spf13/viper"
@@ -28,18 +29,22 @@ type Config struct {
 	GIN_MODE string `mapstructure:"GIN_MODE"`
 }
 
-func LoadConfig(path string) (config Config, err error) {
+var Config_ Config
+
+func InitConfig(path string) {
 	viper.AddConfigPath(path)
 	viper.SetConfigType("env")
 	viper.SetConfigName("app")
 
 	viper.AutomaticEnv()
 
-	err = viper.ReadInConfig()
+	err := viper.ReadInConfig()
 	if err != nil {
-		return
+		log.Fatal("? Could not load environment variables", err)
 	}
 
-	err = viper.Unmarshal(&config)
-	return
+	err = viper.Unmarshal(&Config_)
+	if err != nil {
+		log.Fatal("? Could not load environment variables", err)
+	}
 }

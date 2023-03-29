@@ -20,6 +20,29 @@ definitions:
       verified:
         type: boolean
     type: object
+  models.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.UserSignInInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
   models.UserSignUpInput:
     properties:
       email:
@@ -27,7 +50,7 @@ definitions:
       name:
         type: string
       password:
-        minLength: 8
+        minLength: 5
         type: string
       passwordConfirm:
         type: string
@@ -39,15 +62,97 @@ definitions:
     type: object
   utils.ErrorMessage:
     properties:
-      field:
-        type: string
       message:
+        type: string
+      status:
         type: string
     type: object
 info:
   contact: {}
 paths:
-  /auth/register/:
+  /user/:
+    get:
+      description: get Profile detail
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+      security:
+      - ApiKeyAuth: []
+      summary: Show My Profile Detail
+      tags:
+      - users
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get User detail
+      parameters:
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+      security:
+      - ApiKeyAuth: []
+      summary: Show User Detail
+      tags:
+      - users
+  /user/login/:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: SignIn
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSignInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+      summary: Login user
+      tags:
+      - users
+  /user/register/:
     post:
       consumes:
       - application/json
@@ -62,43 +167,22 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            $ref: '#/definitions/models.UserSignUpInput'
-        "400":
-          description: Bad Request
+            $ref: '#/definitions/models.UserResponse'
+        "409":
+          description: Conflict
           schema:
             $ref: '#/definitions/utils.ErrorMessage'
-        "500":
-          description: Internal Server Error
+        "502":
+          description: Bad Gateway
           schema:
             $ref: '#/definitions/utils.ErrorMessage'
       summary: Register new user
       tags:
-      - auth
-  /job/:
-    get:
-      consumes:
-      - application/json
-      description: Job test
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-      summary: Job test
-      tags:
-      - Job
-  /users/all:
+      - users
+  /users/:
     get:
       consumes:
       - application/json
@@ -140,35 +224,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Show Users List
-      tags:
-      - users
-  /users/me:
-    get:
-      consumes:
-      - application/json
-      description: get User detail
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-      security:
-      - ApiKeyAuth: []
-      summary: Show User Detail
       tags:
       - users
 swagger: "2.0"

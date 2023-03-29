@@ -10,7 +10,7 @@ type User struct {
 	ID        uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
 	Name      string    `gorm:"type:varchar(255);not null" filter:"param:login;searchable;filterable;"`
 	Email     string    `gorm:"uniqueIndex;not null" `
-	Phone     string    `gorm:"unique;null;"`
+	Phone     string    `gorm:"unique;default:null"`
 	Password  string    `gorm:"not null"`
 	Verified  bool      `gorm:"not null;default:false;"`
 	Enabled   bool      `gorm:"not null;default:false;"`
@@ -21,7 +21,7 @@ type User struct {
 type UserSignUpInput struct {
 	Name            string `json:"name" binding:"required"`
 	Email           string `json:"email" binding:"required"`
-	Password        string `json:"password" binding:"required,min=8"`
+	Password        string `json:"password" binding:"required,min=5"`
 	PasswordConfirm string `json:"passwordConfirm" binding:"required"`
 }
 

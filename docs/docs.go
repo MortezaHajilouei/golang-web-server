@@ -16,41 +16,26 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/register/": {
-            "post": {
-                "description": "signup user",
-                "consumes": [
-                    "application/json"
+        "/user/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
                 ],
+                "description": "get Profile detail",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "users"
                 ],
-                "summary": "Register new user",
-                "parameters": [
-                    {
-                        "description": "Signup",
-                        "name": "info",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UserSignUpInput"
-                        }
-                    }
-                ],
+                "summary": "Show My Profile Detail",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.UserSignUpInput"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorMessage"
+                            "$ref": "#/definitions/models.User"
                         }
                     },
                     "500": {
@@ -62,9 +47,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/job/": {
-            "get": {
-                "description": "Job test",
+        "/user/login/": {
+            "post": {
+                "description": "Login user",
                 "consumes": [
                     "application/json"
                 ],
@@ -72,9 +57,20 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Job"
+                    "users"
                 ],
-                "summary": "Job test",
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "SignIn",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSignInInput"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -94,7 +90,108 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/all": {
+        "/user/register/": {
+            "post": {
+                "description": "signup user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Register new user",
+                "parameters": [
+                    {
+                        "description": "Signup",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSignUpInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorMessage"
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get User detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Show User Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/": {
             "get": {
                 "security": [
                     {
@@ -165,52 +262,6 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/users/me": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get User detail",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Show User Detail",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorMessage"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorMessage"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorMessage"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -246,6 +297,41 @@ const docTemplate = `{
                 }
             }
         },
+        "models.UserResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserSignInInput": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "models.UserSignUpInput": {
             "type": "object",
             "required": [
@@ -263,7 +349,7 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
-                    "minLength": 8
+                    "minLength": 5
                 },
                 "passwordConfirm": {
                     "type": "string"
@@ -273,10 +359,10 @@ const docTemplate = `{
         "utils.ErrorMessage": {
             "type": "object",
             "properties": {
-                "field": {
+                "message": {
                     "type": "string"
                 },
-                "message": {
+                "status": {
                     "type": "string"
                 }
             }
