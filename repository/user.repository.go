@@ -20,7 +20,7 @@ type UserRepository interface {
 	GetByEmail(string) (models.User, error)
 	GetAllUser(ctx *gin.Context) ([]models.User, error)
 	UpdateUser(models.User) (models.User, error)
-	DeleteUser(models.User) (models.User, error)
+	DeleteUser1(models.User) (models.User, error)
 	Migrate() error
 }
 
@@ -62,7 +62,7 @@ func (u userRepository) UpdateUser(user models.User) (models.User, error) {
 	return user, u.DB.Model(&user).Updates(&user).Error
 }
 
-func (u userRepository) DeleteUser(user models.User) (models.User, error) {
+func (u userRepository) DeleteUser1(user models.User) (models.User, error) {
 	if err := u.DB.First(&user, user.ID).Error; err != nil {
 		return user, err
 	}

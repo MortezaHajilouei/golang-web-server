@@ -54,6 +54,7 @@ func SetupRoutes(db *gorm.DB, httpRouter *gin.Engine) {
 		usersRoutes := apiRoutes.Group("/users")
 		{
 			usersRoutes.GET("/", userController.GetAllUser)
+			usersRoutes.GET("/f", userController.GetAllUser)
 		}
 	}
 
