@@ -66,16 +66,7 @@ func SetupRoutes(db *gorm.DB, httpRouter *gin.Engine) {
 		usersRoutes := apiRoutes.Group("/users")
 		{
 			usersRoutes.GET("/", userController.GetAllUser)
-			usersRoutes.GET("/f", userController.GetAllUser)
 		}
 	}
-
-	// userProtectedRoutes := apiRoutes.Group("/users", middleware.AuthorizeJWT())
-	// {
-	// 	userProtectedRoutes.GET("/", middleware.Authorize("report", "read", enforcer), userController.GetAllUser)
-	// 	userProtectedRoutes.GET("/:user", middleware.Authorize("report", "read", enforcer), userController.GetUser)
-	// 	userProtectedRoutes.PUT("/:user", middleware.Authorize("report", "write", enforcer), userController.UpdateUser)
-	// 	userProtectedRoutes.DELETE("/:user", middleware.Authorize("report", "write", enforcer), userController.DeleteUser)
-	// }
 
 }

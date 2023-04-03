@@ -265,27 +265,117 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.File": {
+            "type": "object",
+            "properties": {
+                "fileType": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Permission": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Role": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Permission"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.User": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "bankId": {
+                    "type": "string"
+                },
                 "birthDay": {
                     "type": "string"
                 },
                 "createdAt": {
                     "type": "string"
                 },
+                "deposit": {
+                    "type": "boolean"
+                },
+                "economyNum": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
-                "enabled": {
+                "emailVerified": {
                     "type": "boolean"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.File"
+                    }
                 },
                 "firstName": {
                     "description": "filter:\"param:login;searchable;filterable;\"",
                     "type": "string"
                 },
+                "getEmail": {
+                    "type": "boolean"
+                },
+                "getNewsLetter": {
+                    "type": "boolean"
+                },
+                "getSms": {
+                    "type": "boolean"
+                },
+                "guildTitle": {
+                    "type": "string"
+                },
+                "hasWallet": {
+                    "type": "boolean"
+                },
+                "iban": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "isActive": {
+                    "type": "boolean"
+                },
+                "isLegal": {
+                    "type": "boolean"
                 },
                 "lastName": {
                     "type": "string"
@@ -293,20 +383,44 @@ const docTemplate = `{
                 "mobile": {
                     "type": "string"
                 },
+                "mobileVerified": {
+                    "type": "boolean"
+                },
+                "nationalCode": {
+                    "type": "string"
+                },
+                "nationalNum": {
+                    "type": "string"
+                },
                 "password": {
                     "type": "string"
                 },
-                "passwordModified": {
+                "passwordModifiedAt": {
                     "type": "string"
                 },
+                "profilePic": {
+                    "type": "string"
+                },
+                "registrationNum": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
                 "secretCode": {
+                    "type": "string"
+                },
+                "telephone": {
                     "type": "string"
                 },
                 "updatedAt": {
                     "type": "string"
                 },
-                "verified": {
-                    "type": "boolean"
+                "walletAlias": {
+                    "type": "string"
+                },
+                "zipCode": {
+                    "type": "string"
                 }
             }
         },
@@ -351,8 +465,10 @@ const docTemplate = `{
                 "email",
                 "firstname",
                 "lastname",
+                "national_code",
                 "password",
-                "passwordConfirm"
+                "passwordConfirm",
+                "phone"
             ],
             "properties": {
                 "email": {
@@ -364,11 +480,17 @@ const docTemplate = `{
                 "lastname": {
                     "type": "string"
                 },
+                "national_code": {
+                    "type": "string"
+                },
                 "password": {
                     "type": "string",
                     "minLength": 5
                 },
                 "passwordConfirm": {
+                    "type": "string"
+                },
+                "phone": {
                     "type": "string"
                 }
             }

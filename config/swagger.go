@@ -7,4 +7,5 @@ func Swagger() {
 	docs.SwaggerInfo.Description = "GardeshPay"
 	docs.SwaggerInfo.Host = "localhost:8080"
 	docs.SwaggerInfo.BasePath = "/api/v1"
+
 }

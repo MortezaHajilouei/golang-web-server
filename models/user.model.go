@@ -22,7 +22,7 @@ type User struct {
 	BankId      string
 	WalletAlias string
 
-	IsLegal         bool   `gorm:"type:boolean;default:false" `
+	IsLegal         bool   `gorm:"type:boolean;default:false"`
 	ZipCode         string `gorm:"type:string;not null"`
 	RegistrationNum string `gorm:"type:string;not null"`
 	NationalNum     string `gorm:"type:string;not null"`
@@ -41,14 +41,17 @@ type User struct {
 	CreatedAt          time.Time `gorm:"autoCreateTime;<-:create;"`
 	UpdatedAt          time.Time `gorm:"autoUpdateTime;"`
 	PasswordModifiedAt time.Time `gorm:"autoCreateTime;"`
-	Files              []File    `gorm:"foreignKey:Id;"`
-	Role               Role      `gorm:"foreignKey:Id"`
+
+	Files []File `gorm:"foreignKey:Id;"`
+	Role  Role   `gorm:"foreignKey:Id"`
 }
 
 type UserSignUpInput struct {
 	FirstName       string `json:"firstname" binding:"required"`
 	LastName        string `json:"lastname" binding:"required"`
 	Email           string `json:"email" binding:"required"`
+	Mobile          string `json:"phone" binding:"required"`
+	NationalCode    string `json:"national_code" binding:"required"`
 	Password        string `json:"password" binding:"required,min=5"`
 	PasswordConfirm string `json:"passwordConfirm" binding:"required"`
 }

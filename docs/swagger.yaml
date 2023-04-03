@@ -1,33 +1,108 @@
 definitions:
+  models.File:
+    properties:
+      fileType:
+        type: string
+      id:
+        type: integer
+      url:
+        type: string
+    type: object
+  models.Permission:
+    properties:
+      id:
+        type: integer
+      method:
+        type: string
+      path:
+        type: string
+      title:
+        type: string
+    type: object
+  models.Role:
+    properties:
+      id:
+        type: integer
+      permissions:
+        items:
+          $ref: '#/definitions/models.Permission'
+        type: array
+      title:
+        type: string
+    type: object
   models.User:
     properties:
+      address:
+        type: string
+      bankId:
+        type: string
       birthDay:
         type: string
       createdAt:
         type: string
+      deposit:
+        type: boolean
+      economyNum:
+        type: string
       email:
         type: string
-      enabled:
+      emailVerified:
         type: boolean
+      files:
+        items:
+          $ref: '#/definitions/models.File'
+        type: array
       firstName:
         description: filter:"param:login;searchable;filterable;"
         type: string
+      getEmail:
+        type: boolean
+      getNewsLetter:
+        type: boolean
+      getSms:
+        type: boolean
+      guildTitle:
+        type: string
+      hasWallet:
+        type: boolean
+      iban:
+        type: string
       id:
         type: integer
+      isActive:
+        type: boolean
+      isLegal:
+        type: boolean
       lastName:
         type: string
       mobile:
         type: string
+      mobileVerified:
+        type: boolean
+      nationalCode:
+        type: string
+      nationalNum:
+        type: string
       password:
         type: string
-      passwordModified:
+      passwordModifiedAt:
         type: string
+      profilePic:
+        type: string
+      registrationNum:
+        type: string
+      role:
+        $ref: '#/definitions/models.Role'
       secretCode:
+        type: string
+      telephone:
         type: string
       updatedAt:
         type: string
-      verified:
-        type: boolean
+      walletAlias:
+        type: string
+      zipCode:
+        type: string
     type: object
   models.UserResponse:
     properties:
@@ -60,17 +135,23 @@ definitions:
         type: string
       lastname:
         type: string
+      national_code:
+        type: string
       password:
         minLength: 5
         type: string
       passwordConfirm:
         type: string
+      phone:
+        type: string
     required:
     - email
     - firstname
     - lastname
+    - national_code
     - password
     - passwordConfirm
+    - phone
     type: object
   utils.ErrorMessage:
     properties:
