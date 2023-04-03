@@ -268,6 +268,9 @@ const docTemplate = `{
         "models.User": {
             "type": "object",
             "properties": {
+                "birthDay": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -277,16 +280,26 @@ const docTemplate = `{
                 "enabled": {
                     "type": "boolean"
                 },
-                "id": {
+                "firstName": {
+                    "description": "filter:\"param:login;searchable;filterable;\"",
                     "type": "string"
                 },
-                "name": {
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "mobile": {
                     "type": "string"
                 },
                 "password": {
                     "type": "string"
                 },
-                "phone": {
+                "passwordModified": {
+                    "type": "string"
+                },
+                "secretCode": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -307,7 +320,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -336,7 +349,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "email",
-                "name",
+                "firstname",
+                "lastname",
                 "password",
                 "passwordConfirm"
             ],
@@ -344,7 +358,10 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "name": {
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
                     "type": "string"
                 },
                 "password": {

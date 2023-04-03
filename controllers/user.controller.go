@@ -55,8 +55,8 @@ func (uc userController) GetUser(ctx *gin.Context) {
 		return
 	}
 	userResponse := &models.UserResponse{
-		ID:        user.ID,
-		Name:      user.Name,
+		Id:        user.Id,
+		Name:      user.FirstName,
 		Email:     user.Email,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
@@ -77,8 +77,8 @@ func (uc userController) GetUser(ctx *gin.Context) {
 func (uc userController) GetMe(ctx *gin.Context) {
 	user := ctx.MustGet("currentUser").(models.User)
 	userResponse := &models.UserResponse{
-		ID:        user.ID,
-		Name:      user.Name,
+		Id:        user.Id,
+		Name:      user.FirstName,
 		Email:     user.Email,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
@@ -112,8 +112,8 @@ func (uc userController) GetAllUser(ctx *gin.Context) {
 
 	for i := 0; i < len(users); i++ {
 		users_response = append(users_response, models.UserResponse{
-			ID:        users[i].ID,
-			Name:      users[i].Name,
+			Id:        users[i].Id,
+			Name:      users[i].FirstName,
 			Email:     users[i].Email,
 			CreatedAt: users[i].CreatedAt,
 			UpdatedAt: users[i].UpdatedAt,
@@ -154,9 +154,10 @@ func (uc userController) SignUpUser(ctx *gin.Context) {
 	}
 
 	newUser := models.User{
-		Name:     payload.Name,
-		Email:    strings.ToLower(payload.Email),
-		Password: hashedPassword,
+		FirstName: payload.FirstName,
+		LastName:  payload.LastName,
+		Email:     strings.ToLower(payload.Email),
+		Password:  hashedPassword,
 	}
 	result, err := uc.userRepo.AddUser(newUser)
 	if err != nil && strings.Contains(err.Error(), "duplicated key not allowed") {
@@ -168,8 +169,8 @@ func (uc userController) SignUpUser(ctx *gin.Context) {
 	}
 
 	userResponse := &models.UserResponse{
-		ID:        result.ID,
-		Name:      result.Name,
+		Id:        result.Id,
+		Name:      result.FirstName,
 		Email:     result.Email,
 		CreatedAt: result.CreatedAt,
 		UpdatedAt: result.UpdatedAt,
@@ -211,13 +212,13 @@ func (ac userController) SignInUser(ctx *gin.Context) {
 	config := config.Config_
 
 	// Generate Tokens
-	access_token, err := utils.CreateToken(config.AccessTokenExpiresIn, user.ID, config.AccessTokenPrivateKey)
+	access_token, err := utils.CreateToken(config.AccessTokenExpiresIn, user.Id, config.AccessTokenPrivateKey)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
 
-	refresh_token, err := utils.CreateToken(config.RefreshTokenExpiresIn, user.ID, config.RefreshTokenPrivateKey)
+	refresh_token, err := utils.CreateToken(config.RefreshTokenExpiresIn, user.Id, config.RefreshTokenPrivateKey)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": err.Error()})
 		return
@@ -256,7 +257,7 @@ func (uc *userController) RefreshAccessToken(ctx *gin.Context) {
 		return
 	}
 
-	access_token, err := utils.CreateToken(config.AccessTokenExpiresIn, user.ID, config.AccessTokenPrivateKey)
+	access_token, err := utils.CreateToken(config.AccessTokenExpiresIn, user.Id, config.AccessTokenPrivateKey)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"status": "fail", "message": err.Error()})
 		return

@@ -36,9 +36,21 @@ func SetupRoutes(db *gorm.DB, httpRouter *gin.Engine) {
 	// }
 
 	userRepository := repository.NewUserRepository(db)
+	fileRepository := repository.NewFileRepository(db)
+	roleRepository := repository.NewRoleRepository(db)
+	permissionRepository := repository.NewPermissionRepository(db)
 
 	if err := userRepository.Migrate(); err != nil {
 		log.Fatal("User migrate err", err)
+	}
+	if err := fileRepository.Migrate(); err != nil {
+		log.Fatal("File migrate err", err)
+	}
+	if err := roleRepository.Migrate(); err != nil {
+		log.Fatal("Role migrate err", err)
+	}
+	if err := permissionRepository.Migrate(); err != nil {
+		log.Fatal("Permission migrate err", err)
 	}
 
 	userController := controllers.NewUserController(userRepository)

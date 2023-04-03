@@ -56,14 +56,14 @@ func (u userRepository) AddUser(user models.User) (models.User, error) {
 }
 
 func (u userRepository) UpdateUser(user models.User) (models.User, error) {
-	if err := u.DB.First(&user, user.ID).Error; err != nil {
+	if err := u.DB.First(&user, user.Id).Error; err != nil {
 		return user, err
 	}
 	return user, u.DB.Model(&user).Updates(&user).Error
 }
 
 func (u userRepository) DeleteUser1(user models.User) (models.User, error) {
-	if err := u.DB.First(&user, user.ID).Error; err != nil {
+	if err := u.DB.First(&user, user.Id).Error; err != nil {
 		return user, err
 	}
 	return user, u.DB.Delete(&user).Error

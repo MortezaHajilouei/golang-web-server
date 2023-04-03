@@ -256,6 +256,9 @@
         "models.User": {
             "type": "object",
             "properties": {
+                "birthDay": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
@@ -265,16 +268,26 @@
                 "enabled": {
                     "type": "boolean"
                 },
-                "id": {
+                "firstName": {
+                    "description": "filter:\"param:login;searchable;filterable;\"",
                     "type": "string"
                 },
-                "name": {
+                "id": {
+                    "type": "integer"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "mobile": {
                     "type": "string"
                 },
                 "password": {
                     "type": "string"
                 },
-                "phone": {
+                "passwordModified": {
+                    "type": "string"
+                },
+                "secretCode": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -295,7 +308,7 @@
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -324,7 +337,8 @@
             "type": "object",
             "required": [
                 "email",
-                "name",
+                "firstname",
+                "lastname",
                 "password",
                 "passwordConfirm"
             ],
@@ -332,7 +346,10 @@
                 "email": {
                     "type": "string"
                 },
-                "name": {
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
                     "type": "string"
                 },
                 "password": {
