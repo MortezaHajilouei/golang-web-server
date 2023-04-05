@@ -19,4 +19,3 @@ logs.txt
 .idea/
 tmp/
 secret.md
-app.env
