@@ -1,118 +1,15 @@
 definitions:
-  models.File:
-    properties:
-      fileType:
-        type: string
-      id:
-        type: integer
-      url:
-        type: string
-    type: object
-  models.Permission:
-    properties:
-      id:
-        type: integer
-      method:
-        type: string
-      path:
-        type: string
-      title:
-        type: string
-    type: object
-  models.Role:
-    properties:
-      id:
-        type: integer
-      permissions:
-        items:
-          $ref: '#/definitions/models.Permission'
-        type: array
-      title:
-        type: string
-    type: object
-  models.User:
-    properties:
-      address:
-        type: string
-      bankId:
-        type: string
-      birthDay:
-        type: string
-      createdAt:
-        type: string
-      deposit:
-        type: boolean
-      economyNum:
-        type: string
-      email:
-        type: string
-      emailVerified:
-        type: boolean
-      files:
-        items:
-          $ref: '#/definitions/models.File'
-        type: array
-      firstName:
-        description: filter:"param:login;searchable;filterable;"
-        type: string
-      getEmail:
-        type: boolean
-      getNewsLetter:
-        type: boolean
-      getSms:
-        type: boolean
-      guildTitle:
-        type: string
-      hasWallet:
-        type: boolean
-      iban:
-        type: string
-      id:
-        type: integer
-      isActive:
-        type: boolean
-      isLegal:
-        type: boolean
-      lastName:
-        type: string
-      mobile:
-        type: string
-      mobileVerified:
-        type: boolean
-      nationalCode:
-        type: string
-      nationalNum:
-        type: string
-      password:
-        type: string
-      passwordModifiedAt:
-        type: string
-      profilePic:
-        type: string
-      registrationNum:
-        type: string
-      role:
-        $ref: '#/definitions/models.Role'
-      secretCode:
-        type: string
-      telephone:
-        type: string
-      updatedAt:
-        type: string
-      walletAlias:
-        type: string
-      zipCode:
-        type: string
-    type: object
   models.UserResponse:
     properties:
       created_at:
         type: string
       email:
         type: string
+      first_name:
+        type: string
       id:
         type: integer
-      name:
+      last_name:
         type: string
       updated_at:
         type: string
@@ -120,8 +17,10 @@ definitions:
   models.UserSignInInput:
     properties:
       email:
+        default: email@example.com
         type: string
       password:
+        default: password
         type: string
     required:
     - email
@@ -129,22 +28,106 @@ definitions:
     type: object
   models.UserSignUpInput:
     properties:
+      address:
+        default: تهران
+        type: string
+      bankId:
+        default: "2"
+        type: string
+      date:
+        default: "1990-01-01T00:00:00.0Z"
+        type: string
       email:
+        default: Email@example.com
         type: string
       firstname:
+        default: John
+        type: string
+      iBan:
+        default: "1"
         type: string
       lastname:
+        default: Lenon
         type: string
       national_code:
+        default: "0000000000"
+        maxLength: 10
+        minLength: 10
         type: string
       password:
+        default: password
         minLength: 5
         type: string
       passwordConfirm:
+        default: password
+        minLength: 5
         type: string
       phone:
+        default: "09129999999"
+        maxLength: 11
+        minLength: 11
+        type: string
+      telephone:
+        default: "02122222222"
         type: string
     required:
+    - address
+    - bankId
+    - date
+    - email
+    - firstname
+    - iBan
+    - lastname
+    - national_code
+    - password
+    - passwordConfirm
+    - phone
+    - telephone
+    type: object
+  models.UserSignUpInputAdmin:
+    properties:
+      address:
+        default: تهران
+        type: string
+      date:
+        default: "1990-01-01T00:00:00.0Z"
+        type: string
+      email:
+        default: Email@example.com
+        type: string
+      firstname:
+        default: John
+        type: string
+      lastname:
+        default: Lenon
+        type: string
+      national_code:
+        default: "0000000000"
+        maxLength: 10
+        minLength: 10
+        type: string
+      password:
+        default: password
+        minLength: 5
+        type: string
+      passwordConfirm:
+        default: password
+        minLength: 5
+        type: string
+      phone:
+        default: "09129999999"
+        maxLength: 11
+        minLength: 11
+        type: string
+      telephone:
+        default: "02122222222"
+        type: string
+      username:
+        default: john
+        type: string
+    required:
+    - address
+    - date
     - email
     - firstname
     - lastname
@@ -152,6 +135,86 @@ definitions:
     - password
     - passwordConfirm
     - phone
+    - telephone
+    - username
+    type: object
+  models.UserSignUpInputLegal:
+    properties:
+      address:
+        default: تهران
+        type: string
+      bankId:
+        default: "1"
+        type: string
+      date:
+        default: "1990-01-01T00:00:00.0Z"
+        type: string
+      economyNum:
+        default: "1111111111"
+        type: string
+      email:
+        default: Email@example.com
+        type: string
+      firstname:
+        default: John
+        type: string
+      guildTitle:
+        default: GuildTitle
+        type: string
+      iBan:
+        default: "1"
+        type: string
+      lastname:
+        default: Lenon
+        type: string
+      national_code:
+        default: "0000000000"
+        maxLength: 10
+        minLength: 10
+        type: string
+      nationalNum:
+        default: "1111111111"
+        type: string
+      password:
+        default: password
+        minLength: 5
+        type: string
+      passwordConfirm:
+        default: password
+        minLength: 5
+        type: string
+      phone:
+        default: "09129999999"
+        maxLength: 11
+        minLength: 11
+        type: string
+      registrationNum:
+        default: "1111111111"
+        type: string
+      telephone:
+        default: "02122222222"
+        type: string
+      zipCode:
+        default: "1111111111"
+        type: string
+    required:
+    - address
+    - bankId
+    - date
+    - economyNum
+    - email
+    - firstname
+    - guildTitle
+    - iBan
+    - lastname
+    - nationalNum
+    - national_code
+    - password
+    - passwordConfirm
+    - phone
+    - registrationNum
+    - telephone
+    - zipCode
     type: object
   utils.ErrorMessage:
     properties:
@@ -163,60 +226,6 @@ definitions:
 info:
   contact: {}
 paths:
-  /user/:
-    get:
-      description: get Profile detail
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-      security:
-      - ApiKeyAuth: []
-      summary: Show My Profile Detail
-      tags:
-      - users
-  /user/{id}:
-    get:
-      consumes:
-      - application/json
-      description: get User detail
-      parameters:
-      - description: user id
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.User'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-      security:
-      - ApiKeyAuth: []
-      summary: Show User Detail
-      tags:
-      - users
   /user/login/:
     post:
       consumes:
@@ -243,6 +252,25 @@ paths:
           schema:
             $ref: '#/definitions/utils.ErrorMessage'
       summary: Login user
+      tags:
+      - users
+  /user/me/:
+    get:
+      description: get Profile detail
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+      security:
+      - ApiKeyAuth: []
+      summary: Show My Profile Detail
       tags:
       - users
   /user/register/:
@@ -275,48 +303,64 @@ paths:
       summary: Register new user
       tags:
       - users
-  /users/:
-    get:
+  /user/register/admin:
+    post:
       consumes:
       - application/json
-      description: get users list
+      description: signup admin user
       parameters:
-      - in: query
-        name: filter
-        type: string
-      - in: query
-        name: limit
-        type: integer
-      - in: query
-        name: order_by
-        type: string
-      - in: query
-        name: order_direction
-        type: string
-      - in: query
-        name: page
-        type: integer
-      - in: query
-        name: search
-        type: string
+      - description: Signup
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSignUpInputAdmin'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            $ref: '#/definitions/models.User'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/utils.ErrorMessage'
-        "500":
-          description: Internal Server Error
+            $ref: '#/definitions/models.UserResponse'
+        "409":
+          description: Conflict
           schema:
             $ref: '#/definitions/utils.ErrorMessage'
-      security:
-      - ApiKeyAuth: []
-      summary: Show Users List
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+      summary: Register new admin user
+      tags:
+      - users
+  /user/register/legal:
+    post:
+      consumes:
+      - application/json
+      description: signup legal user
+      parameters:
+      - description: Signup
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSignUpInputLegal'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/utils.ErrorMessage'
+      summary: Register new legal user
       tags:
       - users
 swagger: "2.0"

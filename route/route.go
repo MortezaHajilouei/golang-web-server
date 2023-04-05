@@ -4,36 +4,13 @@ import (
 	"log"
 
 	"github.com/MortezaHajilouei/golang-web-server/controllers"
+	"github.com/MortezaHajilouei/golang-web-server/middleware"
 	"github.com/MortezaHajilouei/golang-web-server/repository"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func SetupRoutes(db *gorm.DB, httpRouter *gin.Engine) {
-
-	// Initialize  casbin adapter
-	//adapter := gormadapter.NewAdapterByDB(db)
-
-	// if err != nil {
-	// 	panic(fmt.Sprintf("failed to initialize casbin adapter: %v", err))
-	// }
-
-	// // Load model configuration file and policy store adapter
-	//enforcer := casbin.NewEnforcer("config/rbac_model.conf", adapter)
-	// if err != nil {
-	// 	panic(fmt.Sprintf("failed to create casbin enforcer: %v", err))
-	// }
-
-	// //add policy
-	// if hasPolicy := enforcer.HasPolicy("doctor", "report", "read"); !hasPolicy {
-	// 	enforcer.AddPolicy("doctor", "report", "read")
-	// }
-	// if hasPolicy := enforcer.HasPolicy("doctor", "report", "write"); !hasPolicy {
-	// 	enforcer.AddPolicy("doctor", "report", "write")
-	// }
-	// if hasPolicy := enforcer.HasPolicy("patient", "report", "read"); !hasPolicy {
-	// 	enforcer.AddPolicy("patient", "report", "read")
-	// }
 
 	userRepository := repository.NewUserRepository(db)
 	fileRepository := repository.NewFileRepository(db)
@@ -58,15 +35,13 @@ func SetupRoutes(db *gorm.DB, httpRouter *gin.Engine) {
 	{
 		userRoutes := apiRoutes.Group("/user")
 		{
-			userRoutes.GET("/:id", userController.GetUser)
-			userRoutes.GET("/", userController.GetMe)
+			//userRoutes.GET("/:id", userController.GetUser)
 			userRoutes.POST("/register/", userController.SignUpUser)
+			userRoutes.POST("/register/legal", userController.SignUpUserLegal)
+			userRoutes.POST("/register/admin", userController.SignUpUserAdmin)
 			userRoutes.POST("/login/", userController.SignInUser)
-		}
-		usersRoutes := apiRoutes.Group("/users")
-		{
-			usersRoutes.GET("/", userController.GetAllUser)
+			userRoutes.GET("/me/", middleware.Session(), middleware.Authenticate(), userController.GetMe)
+
 		}
 	}
-
 }

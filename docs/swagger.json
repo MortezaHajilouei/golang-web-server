@@ -4,37 +4,6 @@
         "contact": {}
     },
     "paths": {
-        "/user/": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get Profile detail",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "Show My Profile Detail",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.User"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorMessage"
-                        }
-                    }
-                }
-            }
-        },
         "/user/login/": {
             "post": {
                 "description": "Login user",
@@ -67,6 +36,37 @@
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/utils.ErrorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ErrorMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/me/": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get Profile detail",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Show My Profile Detail",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "500": {
@@ -124,14 +124,9 @@
                 }
             }
         },
-        "/user/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get User detail",
+        "/user/register/admin": {
+            "post": {
+                "description": "signup admin user",
                 "consumes": [
                     "application/json"
                 ],
@@ -141,37 +136,33 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "Show User Detail",
+                "summary": "Register new admin user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "user id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
+                        "description": "Signup",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSignUpInputAdmin"
+                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ErrorMessage"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
+                    "409": {
+                        "description": "Conflict",
                         "schema": {
                             "$ref": "#/definitions/utils.ErrorMessage"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "502": {
+                        "description": "Bad Gateway",
                         "schema": {
                             "$ref": "#/definitions/utils.ErrorMessage"
                         }
@@ -179,14 +170,9 @@
                 }
             }
         },
-        "/users/": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get users list",
+        "/user/register/legal": {
+            "post": {
+                "description": "signup legal user",
                 "consumes": [
                     "application/json"
                 ],
@@ -196,54 +182,33 @@
                 "tags": [
                     "users"
                 ],
-                "summary": "Show Users List",
+                "summary": "Register new legal user",
                 "parameters": [
                     {
-                        "type": "string",
-                        "name": "filter",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "order_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "order_direction",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "search",
-                        "in": "query"
+                        "description": "Signup",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSignUpInputLegal"
+                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "409": {
+                        "description": "Conflict",
                         "schema": {
                             "$ref": "#/definitions/utils.ErrorMessage"
                         }
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    "502": {
+                        "description": "Bad Gateway",
                         "schema": {
                             "$ref": "#/definitions/utils.ErrorMessage"
                         }
@@ -253,165 +218,6 @@
         }
     },
     "definitions": {
-        "models.File": {
-            "type": "object",
-            "properties": {
-                "fileType": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "url": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Permission": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Role": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "permissions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Permission"
-                    }
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.User": {
-            "type": "object",
-            "properties": {
-                "address": {
-                    "type": "string"
-                },
-                "bankId": {
-                    "type": "string"
-                },
-                "birthDay": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "deposit": {
-                    "type": "boolean"
-                },
-                "economyNum": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "emailVerified": {
-                    "type": "boolean"
-                },
-                "files": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.File"
-                    }
-                },
-                "firstName": {
-                    "description": "filter:\"param:login;searchable;filterable;\"",
-                    "type": "string"
-                },
-                "getEmail": {
-                    "type": "boolean"
-                },
-                "getNewsLetter": {
-                    "type": "boolean"
-                },
-                "getSms": {
-                    "type": "boolean"
-                },
-                "guildTitle": {
-                    "type": "string"
-                },
-                "hasWallet": {
-                    "type": "boolean"
-                },
-                "iban": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "isActive": {
-                    "type": "boolean"
-                },
-                "isLegal": {
-                    "type": "boolean"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "mobile": {
-                    "type": "string"
-                },
-                "mobileVerified": {
-                    "type": "boolean"
-                },
-                "nationalCode": {
-                    "type": "string"
-                },
-                "nationalNum": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "passwordModifiedAt": {
-                    "type": "string"
-                },
-                "profilePic": {
-                    "type": "string"
-                },
-                "registrationNum": {
-                    "type": "string"
-                },
-                "role": {
-                    "$ref": "#/definitions/models.Role"
-                },
-                "secretCode": {
-                    "type": "string"
-                },
-                "telephone": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "walletAlias": {
-                    "type": "string"
-                },
-                "zipCode": {
-                    "type": "string"
-                }
-            }
-        },
         "models.UserResponse": {
             "type": "object",
             "properties": {
@@ -421,10 +227,13 @@
                 "email": {
                     "type": "string"
                 },
+                "first_name": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "last_name": {
                     "type": "string"
                 },
                 "updated_at": {
@@ -440,46 +249,251 @@
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "email@example.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "password"
                 }
             }
         },
         "models.UserSignUpInput": {
             "type": "object",
             "required": [
+                "address",
+                "bankId",
+                "date",
+                "email",
+                "firstname",
+                "iBan",
+                "lastname",
+                "national_code",
+                "password",
+                "passwordConfirm",
+                "phone",
+                "telephone"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "default": "تهران"
+                },
+                "bankId": {
+                    "type": "string",
+                    "default": "2"
+                },
+                "date": {
+                    "type": "string",
+                    "default": "1990-01-01T00:00:00.0Z"
+                },
+                "email": {
+                    "type": "string",
+                    "default": "Email@example.com"
+                },
+                "firstname": {
+                    "type": "string",
+                    "default": "John"
+                },
+                "iBan": {
+                    "type": "string",
+                    "default": "1"
+                },
+                "lastname": {
+                    "type": "string",
+                    "default": "Lenon"
+                },
+                "national_code": {
+                    "type": "string",
+                    "default": "0000000000",
+                    "maxLength": 10,
+                    "minLength": 10
+                },
+                "password": {
+                    "type": "string",
+                    "default": "password",
+                    "minLength": 5
+                },
+                "passwordConfirm": {
+                    "type": "string",
+                    "default": "password",
+                    "minLength": 5
+                },
+                "phone": {
+                    "type": "string",
+                    "default": "09129999999",
+                    "maxLength": 11,
+                    "minLength": 11
+                },
+                "telephone": {
+                    "type": "string",
+                    "default": "02122222222"
+                }
+            }
+        },
+        "models.UserSignUpInputAdmin": {
+            "type": "object",
+            "required": [
+                "address",
+                "date",
                 "email",
                 "firstname",
                 "lastname",
                 "national_code",
                 "password",
                 "passwordConfirm",
-                "phone"
+                "phone",
+                "telephone",
+                "username"
             ],
             "properties": {
+                "address": {
+                    "type": "string",
+                    "default": "تهران"
+                },
+                "date": {
+                    "type": "string",
+                    "default": "1990-01-01T00:00:00.0Z"
+                },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Email@example.com"
                 },
                 "firstname": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "John"
                 },
                 "lastname": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "Lenon"
                 },
                 "national_code": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "0000000000",
+                    "maxLength": 10,
+                    "minLength": 10
                 },
                 "password": {
                     "type": "string",
+                    "default": "password",
                     "minLength": 5
                 },
                 "passwordConfirm": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "password",
+                    "minLength": 5
                 },
                 "phone": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "09129999999",
+                    "maxLength": 11,
+                    "minLength": 11
+                },
+                "telephone": {
+                    "type": "string",
+                    "default": "02122222222"
+                },
+                "username": {
+                    "type": "string",
+                    "default": "john"
+                }
+            }
+        },
+        "models.UserSignUpInputLegal": {
+            "type": "object",
+            "required": [
+                "address",
+                "bankId",
+                "date",
+                "economyNum",
+                "email",
+                "firstname",
+                "guildTitle",
+                "iBan",
+                "lastname",
+                "nationalNum",
+                "national_code",
+                "password",
+                "passwordConfirm",
+                "phone",
+                "registrationNum",
+                "telephone",
+                "zipCode"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "default": "تهران"
+                },
+                "bankId": {
+                    "type": "string",
+                    "default": "1"
+                },
+                "date": {
+                    "type": "string",
+                    "default": "1990-01-01T00:00:00.0Z"
+                },
+                "economyNum": {
+                    "type": "string",
+                    "default": "1111111111"
+                },
+                "email": {
+                    "type": "string",
+                    "default": "Email@example.com"
+                },
+                "firstname": {
+                    "type": "string",
+                    "default": "John"
+                },
+                "guildTitle": {
+                    "type": "string",
+                    "default": "GuildTitle"
+                },
+                "iBan": {
+                    "type": "string",
+                    "default": "1"
+                },
+                "lastname": {
+                    "type": "string",
+                    "default": "Lenon"
+                },
+                "nationalNum": {
+                    "type": "string",
+                    "default": "1111111111"
+                },
+                "national_code": {
+                    "type": "string",
+                    "default": "0000000000",
+                    "maxLength": 10,
+                    "minLength": 10
+                },
+                "password": {
+                    "type": "string",
+                    "default": "password",
+                    "minLength": 5
+                },
+                "passwordConfirm": {
+                    "type": "string",
+                    "default": "password",
+                    "minLength": 5
+                },
+                "phone": {
+                    "type": "string",
+                    "default": "09129999999",
+                    "maxLength": 11,
+                    "minLength": 11
+                },
+                "registrationNum": {
+                    "type": "string",
+                    "default": "1111111111"
+                },
+                "telephone": {
+                    "type": "string",
+                    "default": "02122222222"
+                },
+                "zipCode": {
+                    "type": "string",
+                    "default": "1111111111"
                 }
             }
         },

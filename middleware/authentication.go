@@ -19,7 +19,7 @@ func Session() gin.HandlerFunc {
 		authorizationHeader := ctx.Request.Header.Get("Authorization")
 		fields := strings.Fields(authorizationHeader)
 
-		if len(fields) != 0 && fields[0] == "Bearer" {
+		if len(fields) != 0 && fields[0] == "JWT" {
 			access_token = fields[1]
 		} else if err == nil {
 			access_token = cookie
@@ -46,7 +46,12 @@ func Session() gin.HandlerFunc {
 
 func Authenticate() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.Next()
+		user, hasSession := ctx.Get("currentUser")
+		if user != nil && hasSession {
+			ctx.Next()
+		} else {
+			ctx.JSON(403, "Authentication failed")
+		}
 	}
 }
 
