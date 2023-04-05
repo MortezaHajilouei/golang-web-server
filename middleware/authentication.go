@@ -51,17 +51,7 @@ func Authenticate() gin.HandlerFunc {
 			ctx.Next()
 		} else {
 			ctx.JSON(403, "Authentication failed")
+			ctx.Abort()
 		}
 	}
 }
-
-// func Check(ctx *gin.Context, name string) gin.HandlerFunc {
-// 	return func(ctx *gin.Context) {
-// 		user, err := ctx.Get("currentUser")
-// 		if err {
-// 			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"status": "fail", "message": "the user belonging to this token no logger exists"})
-// 			return
-// 		}
-// 		fmt.Printf(user.)
-// 	}
-// }

@@ -14,6 +14,10 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+//@securityDefinitions.apikey JWT
+//@in header
+//@name Authorization
+
 var (
 	server *gin.Engine
 )
@@ -39,7 +43,6 @@ func main() {
 	server.Use(middleware.DefaultStructuredLogger())
 	server.Use(gin.Recovery())
 	server.Use(middleware.Session())
-	server.Use(middleware.Authenticate())
 	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	route.SetupRoutes(config.DB, server)
 

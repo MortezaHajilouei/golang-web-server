@@ -40,8 +40,7 @@ func SetupRoutes(db *gorm.DB, httpRouter *gin.Engine) {
 			userRoutes.POST("/register/legal", userController.SignUpUserLegal)
 			userRoutes.POST("/register/admin", userController.SignUpUserAdmin)
 			userRoutes.POST("/login/", userController.SignInUser)
-			userRoutes.GET("/me/", middleware.Session(), middleware.Authenticate(), userController.GetMe)
-
+			userRoutes.GET("/me/", middleware.Authenticate(), userController.GetMe)
 		}
 	}
 }

@@ -269,7 +269,7 @@ paths:
           schema:
             $ref: '#/definitions/utils.ErrorMessage'
       security:
-      - ApiKeyAuth: []
+      - JWT: []
       summary: Show My Profile Detail
       tags:
       - users
@@ -363,4 +363,9 @@ paths:
       summary: Register new legal user
       tags:
       - users
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

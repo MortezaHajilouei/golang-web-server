@@ -245,7 +245,7 @@ func (ac userController) SignInUser(ctx *gin.Context) {
 
 // ProfileDetail godoc
 // @Summary      Show My Profile Detail
-// @Security 	 ApiKeyAuth
+// @Security 	 JWT
 // @Description  get Profile detail
 // @Tags         users
 // @Produce      json
