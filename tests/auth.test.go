@@ -1,12 +1,14 @@
 package tests
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
-func TestGetCompaniesHandler(t *testing.T) {
-	// req, _ := http.NewRequest("GET", "/companies", nil)
-	// w := httptest.NewRecorder()
+func TestSignup(t *testing.T) {
+	req, _ := http.NewRequest("POST", "/user/register/", nil)
+	w := httptest.NewRecorder()
 	// r.ServeHTTP(w, req)
 
 	// var companies []User
